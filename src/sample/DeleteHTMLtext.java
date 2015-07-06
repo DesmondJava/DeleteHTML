@@ -11,9 +11,14 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.jsoup.Jsoup;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class DeleteHTMLtext extends Application {
@@ -54,7 +59,7 @@ public class DeleteHTMLtext extends Application {
         //File
         Menu fileMenu = new Menu("_File");
         MenuItem openFile = new MenuItem("Открыть файл...");
-        openFile.setOnAction(e -> openFile());
+        openFile.setOnAction(e -> openTextFile());
         fileMenu.getItems().add(openFile);
         MenuItem saveFile = new MenuItem("Сохранить как...");
         saveFile.setDisable(true);
@@ -179,6 +184,33 @@ public class DeleteHTMLtext extends Application {
         if(answer) {
             window.close();
         }
+    }
+
+    public void openTextFile(){
+        Stage confirmWindow = new Stage();
+        String result = "";
+        confirmWindow.initModality(Modality.APPLICATION_MODAL);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+             new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+             new FileChooser.ExtensionFilter("Docs files", "*.doc", "*.docx"));
+        fileChooser.setTitle("Open Text File");
+        File file = fileChooser.showOpenDialog(confirmWindow);
+        if (file != null) {
+            result = readFromFile(file);
+        }
+        inputHTMLfield.setText(result);
+
+    }
+
+    private String readFromFile(File file) {
+        String result = "";
+        try {
+            result = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public static void main(String[] args) {
