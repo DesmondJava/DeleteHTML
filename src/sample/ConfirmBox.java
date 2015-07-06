@@ -23,6 +23,7 @@ public class ConfirmBox {
         label.setText(message);
 
         Button buttonYes = new Button();
+        buttonYes.setMinWidth(40);
         buttonYes.setText("Да");
         buttonYes.setOnAction(e -> {
             result = true;
@@ -30,6 +31,7 @@ public class ConfirmBox {
         });
 
         Button buttonNo = new Button();
+        buttonNo.setMinWidth(40);
         buttonNo.setText("Нет");
         buttonNo.setOnAction(e -> {
             result = false;
