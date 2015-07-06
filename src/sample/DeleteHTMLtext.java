@@ -4,12 +4,11 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -25,6 +24,7 @@ public class DeleteHTMLtext extends Application {
     Button buttonPastle;
     Button buttonRemoveTextFromTextField;
     TextField inputHTMLfield;
+    BorderPane layout;
 
 
     @Override
@@ -47,8 +47,38 @@ public class DeleteHTMLtext extends Application {
                 "* Выполнить - превращает HTML текст в простой текст без тегов.\n\n");
 
         Label madeBy = new Label();
-        madeBy.setText("This program made by Vadym Shevchenko");
+        madeBy.setText("This program made by Vadym Shevchenko   ");
         madeBy.setAlignment(Pos.BOTTOM_RIGHT);
+
+        //Menu
+        //File
+        Menu fileMenu = new Menu("_File");
+        MenuItem openFile = new MenuItem("Открыть файл...");
+        openFile.setOnAction(e -> openFile());
+        fileMenu.getItems().add(openFile);
+        MenuItem saveFile = new MenuItem("Сохранить как...");
+        saveFile.setDisable(true);
+        fileMenu.getItems().add(saveFile);
+        fileMenu.getItems().add(new SeparatorMenuItem());
+        MenuItem exit = new MenuItem("Выйти с программы...");
+        exit.setOnAction(e -> closeProgram());
+        fileMenu.getItems().add(exit);
+
+        //Edit
+        Menu editMenu = new Menu("_Edit");
+        MenuItem paste = new MenuItem("Вставить");
+        paste.setOnAction(e -> pastleTextField());
+        editMenu.getItems().add(paste);
+        MenuItem remove = new MenuItem("Очистить");
+        remove.setOnAction(e -> removeTextFromTextField());
+        editMenu.getItems().add(remove);
+        MenuItem execute = new MenuItem("Выполнить");
+        execute.setOnAction(e -> executeHTMLfromClipboard());
+        editMenu.getItems().add(execute);
+
+        //Main menu bar
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().addAll(fileMenu, editMenu);
 
         //Form
         inputHTMLfield = new TextField();
@@ -56,11 +86,14 @@ public class DeleteHTMLtext extends Application {
 
         //Button
         buttonExecute = new Button("Выполнить");
-        buttonExecute.setOnAction(e -> removeHTMLfromClipboard());
+        buttonExecute.setOnAction(e -> executeHTMLfromClipboard());
+        buttonExecute.setMinWidth(60);
         buttonPastle = new Button("Вставить");
         buttonPastle.setOnAction(e -> pastleTextField());
+        buttonPastle.setMinWidth(60);
         buttonRemoveTextFromTextField = new Button("Очистить");
         buttonRemoveTextFromTextField.setOnAction(e -> removeTextFromTextField());
+        buttonRemoveTextFromTextField.setMinWidth(60);
 
         //Layout
         HBox hbox = new HBox(10);
@@ -71,18 +104,33 @@ public class DeleteHTMLtext extends Application {
         hboxMadeBy.getChildren().addAll(madeBy);
         hboxMadeBy.setAlignment(Pos.BASELINE_RIGHT);
 
-        VBox layout = new VBox(13);
-        layout.setPadding(new Insets(20, 20, 20, 20));
-        layout.getChildren().addAll(description, hbox, buttonExecute, hboxMadeBy);
-        layout.setAlignment(Pos.CENTER);
+        VBox vertLayout = new VBox(13);
+        vertLayout.setPadding(new Insets(20, 20, 20, 20));
+        vertLayout.getChildren().addAll(description,hbox,buttonExecute);
+        vertLayout.setAlignment(Pos.CENTER);
 
-        scene = new Scene(layout, 670, 280);
+
+        layout = new BorderPane();
+        layout.setTop(menuBar);
+        layout.setCenter(vertLayout);
+        layout.setBottom(hboxMadeBy);
+        layout.setPadding(new Insets(0, 0, 10, 0));
+
+
+        scene = new Scene(layout, 670, 290);
         window.setScene(scene);
+        window.setMinHeight(260);
+        window.setMinWidth(350);
+        window.setMaximized(false);
         window.show();
     }
 
+    private void openFile() {
+
+    }
+
     // Button 'Execute'
-    private void removeHTMLfromClipboard() {
+    private void executeHTMLfromClipboard() {
         String textHTML = inputHTMLfield.getText();
 
         //Если текстовое поле пустое то предупреждаем пользователя об этом
