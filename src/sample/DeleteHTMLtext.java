@@ -28,6 +28,10 @@ public class DeleteHTMLtext extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
+        window.setOnCloseRequest(e -> {
+            e.consume();
+            closeProgram();
+        });
         window.setTitle("Удалить HTML из буфера обмена");
 
         //Form
@@ -35,11 +39,11 @@ public class DeleteHTMLtext extends Application {
         inputHTMLfield.setPrefColumnCount(35);
 
         //Button
-        buttonExecute = new Button("Execute");
+        buttonExecute = new Button("Выполнить");
         buttonExecute.setOnAction(e -> removeHTMLfromClipboard());
-        buttonPastle = new Button("Pastle");
+        buttonPastle = new Button("Вставить");
         buttonPastle.setOnAction(e -> pastleTextField());
-        buttonRemoveTextFromTextField = new Button("Remove");
+        buttonRemoveTextFromTextField = new Button("Очистить");
         buttonRemoveTextFromTextField.setOnAction(e -> removeTextFromTextField());
 
         //Layout
@@ -60,27 +64,40 @@ public class DeleteHTMLtext extends Application {
 
     private void removeTextFromTextField() {
         inputHTMLfield.setText("");
-        buttonExecute.setDisable(false);
     }
 
     private void removeHTMLfromClipboard() {
         String textHTML = inputHTMLfield.getText();
-        String textForSuccess = "Операция успешно выполнена! Вставьте новый текст куда вам нужно!";
+
+        if(textHTML.isEmpty()){
+            ConfirmBox.displaySucces("Предупреждение!", "Пожалуйста вставьте сначала ваш текст в текстовую форму", "Хорошо");
+            return;
+        }
+
         String result = Jsoup.parse(textHTML).text();
-        inputHTMLfield.setText(textForSuccess);
+
+
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
         content.putString(result);
         clipboard.setContent(content);
-        buttonExecute.setDisable(true);
+        inputHTMLfield.setText("");
+        ConfirmBox.displaySucces("Успех", "Операция была успешно выполнена!\n" +
+                "Вы можете вставить полученый текст в любой удобный Вам редактор.", "Отлично!");
     }
 
     private void pastleTextField(){
-        buttonExecute.setDisable(false);
         Clipboard clipboard = Clipboard.getSystemClipboard();
         String textFromClipboard = (String) clipboard.getContent(DataFormat.PLAIN_TEXT);
         inputHTMLfield.setText(textFromClipboard);
+    }
+
+    private void closeProgram(){
+        boolean answer = ConfirmBox.display("Выход из программы", "Вы действительно хотите выйти?");
+        if(answer) {
+            window.close();
+        }
     }
 
     public static void main(String[] args) {
