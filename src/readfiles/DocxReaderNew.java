@@ -36,7 +36,7 @@ public class DocxReaderNew implements ReadFromFile {
 
         } catch(org.apache.poi.POIXMLException | IOException e){
             String message = e.getMessage();
-            ConfirmBox.displayError(message);
+            ConfirmBox.displayError("Error", message);
             e.printStackTrace();
         }
         return result;

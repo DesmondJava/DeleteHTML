@@ -28,7 +28,7 @@ public class DocReader implements ReadFromFile {
             text = we.getText();
         } catch(org.apache.poi.poifs.filesystem.OfficeXmlFileException | java.io.IOException e){
             String message = e.getMessage();
-            ConfirmBox.displayError(message);
+            ConfirmBox.displayError("Error", message);
             e.printStackTrace();
         }
 

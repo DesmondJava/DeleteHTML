@@ -25,7 +25,7 @@ public class TxtReader implements ReadFromFile {
             result = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
         } catch (IOException e) {
             String message = e.getMessage();
-            ConfirmBox.displayError(message);
+            ConfirmBox.displayError("Error", message);
             e.printStackTrace();
         }
         return result;

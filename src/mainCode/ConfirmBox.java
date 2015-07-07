@@ -47,7 +47,7 @@ public class ConfirmBox {
         return result;
     }
 
-    public static void displaySucces(String title, String message, String nameButton){
+    public static void displayWarning(String title, String message, String nameButton){
         Stage confirmWindow = new Stage();
         confirmWindow.setTitle(title);
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
@@ -71,12 +71,45 @@ public class ConfirmBox {
         confirmWindow.showAndWait();
     }
 
-    public static void displayError(String message){
+    public static boolean displaySucces(){
         Stage confirmWindow = new Stage();
-        confirmWindow.setTitle("Error");
+        confirmWindow.setTitle("Успех");
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
-        confirmWindow.setMinWidth(550);
-        confirmWindow.setMinHeight(200);
+        confirmWindow.setMinWidth(500);
+        confirmWindow.setMinHeight(150);
+
+        final boolean[] isSaveAs = {false};
+
+        Label label = new Label();
+        label.setText("Операция была успешно выполнена!\n" +
+                "Вы можете вставить полученый текст в любой удобный Вам редактор.");
+
+        Button saveAsButton = new Button();
+        saveAsButton.setText("Сохранить как");
+        saveAsButton.setOnAction(e -> {
+            isSaveAs[0] = true;
+            confirmWindow.close();
+        });
+
+        Button okeyButton = new Button();
+        okeyButton.setText("Отлично!");
+        okeyButton.setOnAction(e -> {
+            confirmWindow.close();
+        });
+
+        VBox layout = new VBox(10);
+
+        layout.getChildren().addAll(label, saveAsButton, okeyButton);
+        layout.setAlignment(Pos.CENTER);
+        confirmWindow.setScene(new Scene(layout));
+        confirmWindow.showAndWait();
+        return isSaveAs[0];
+    }
+
+    public static void displayError(String title, String message){
+        Stage confirmWindow = new Stage();
+        confirmWindow.setTitle(title);
+        confirmWindow.initModality(Modality.APPLICATION_MODAL);
 
         Label label = new Label();
         label.setText(message);

@@ -19,6 +19,8 @@ import readfiles.FactoryReader;
 import readfiles.ReadFromFile;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class DeleteHTMLtext extends Application {
@@ -62,9 +64,10 @@ public class DeleteHTMLtext extends Application {
         MenuItem openFile = new MenuItem("Открыть файл...");
         openFile.setOnAction(e -> openTextFile());
         fileMenu.getItems().add(openFile);
-        MenuItem saveFile = new MenuItem("Сохранить как...");
-        saveFile.setDisable(true);
-        fileMenu.getItems().add(saveFile);
+        MenuItem saveFileButton = new MenuItem("Сохранить как...");
+//        saveFile.setDisable(true);
+        saveFileButton.setOnAction(e -> saveFileFileChooser());
+        fileMenu.getItems().add(saveFileButton);
         fileMenu.getItems().add(new SeparatorMenuItem());
         MenuItem exit = new MenuItem("Выйти с программы...");
         exit.setOnAction(e -> closeProgram());
@@ -131,13 +134,15 @@ public class DeleteHTMLtext extends Application {
         window.show();
     }
 
+
+
     // Button 'Execute'
     private void executeHTMLfromClipboard() {
         String textHTML = inputHTMLfield.getText();
 
         //Если текстовое поле пустое то предупреждаем пользователя об этом
         if(textHTML.isEmpty()){
-            ConfirmBox.displaySucces("Предупреждение!", "Пожалуйста вставьте сначала ваш текст в текстовую форму", "Хорошо");
+            ConfirmBox.displayWarning("Предупреждение!", "Пожалуйста вставьте сначала ваш текст в текстовую форму", "Хорошо");
             return;
         }
 
@@ -150,8 +155,10 @@ public class DeleteHTMLtext extends Application {
 
         //Show display that operation was successful!
         inputHTMLfield.setText("");
-        ConfirmBox.displaySucces("Успех", "Операция была успешно выполнена!\n" +
-                "Вы можете вставить полученый текст в любой удобный Вам редактор.", "Отлично!");
+        boolean isSaveAsButton = ConfirmBox.displaySucces();
+        if(isSaveAsButton){
+            saveFileFileChooser();
+        }
     }
 
     // Button 'Вставить'
@@ -159,12 +166,12 @@ public class DeleteHTMLtext extends Application {
         Clipboard clipboard = Clipboard.getSystemClipboard();
 
         if(!clipboard.getContentTypes().contains(DataFormat.PLAIN_TEXT)){
-            ConfirmBox.displaySucces("Предупреждение!", "Ваш буфер обмена не содержит текста\nПожалуйста, скопируйте HTML текст в буффер", "Хорошо");
+            ConfirmBox.displayWarning("Предупреждение!", "Ваш буфер обмена не содержит текста\nПожалуйста, скопируйте HTML текст в буффер", "Хорошо");
             return;
         }
         String textFromClipboard = (String) clipboard.getContent(DataFormat.PLAIN_TEXT);
         if(textFromClipboard.isEmpty()){
-            ConfirmBox.displaySucces("Предупреждение!", "Ваш буфер обмена пуст\nСкопируйте HTML текст в буффер", "Хорошо");
+            ConfirmBox.displayWarning("Предупреждение!", "Ваш буфер обмена пуст\nСкопируйте HTML текст в буффер", "Хорошо");
             return;
         }
         inputHTMLfield.setText(textFromClipboard);
@@ -180,6 +187,51 @@ public class DeleteHTMLtext extends Application {
         boolean answer = ConfirmBox.display("Выход из программы", "Вы действительно хотите выйти?");
         if(answer) {
             window.close();
+        }
+    }
+
+    private void saveFileFileChooser() {
+        Stage confirmWindow = new Stage();
+        confirmWindow.initModality(Modality.APPLICATION_MODAL);
+        FileChooser fileChooser = new FileChooser();
+
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+
+
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+
+        if(!clipboard.getContentTypes().contains(DataFormat.PLAIN_TEXT)){
+            ConfirmBox.displayWarning("Предупреждение!", "Ваш буфер обмена не содержит текста\nПожалуйста, выполните для начала операцию 'Выполнить'", "Хорошо");
+            return;
+        }
+
+        String textFromClipboard = (String) clipboard.getContent(DataFormat.PLAIN_TEXT);
+
+
+        //Show save file dialog
+        File file = fileChooser.showSaveDialog(confirmWindow);
+
+        if(textFromClipboard.isEmpty()){
+            ConfirmBox.displayWarning("Предупреждение!", "Ваш буфер обмена не содержит текста\nПожалуйста, выполните для начала операцию 'Выполнить'", "Хорошо");
+            return;
+        }
+        if(file != null){
+            saveFile(textFromClipboard, file);
+        }
+    }
+
+    private void saveFile(String textFromClipboard, File file) {
+        try (FileWriter fileWriter = new FileWriter(file)){
+            fileWriter.write(textFromClipboard);
+            fileWriter.close();
+            ConfirmBox.displayError("Succesful", "Ваш текст успешно сохранен");
+        } catch (IOException ex) {
+            String message = ex.getMessage();
+            ConfirmBox.displayError("Error", message);
+            ex.printStackTrace();
         }
     }
 
