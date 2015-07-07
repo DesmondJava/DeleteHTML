@@ -1,5 +1,6 @@
 package maincode;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -116,6 +117,7 @@ public class ConfirmBox {
 
         Button okeyButton = new Button();
         okeyButton.setText("Ok");
+        okeyButton.setMinWidth(40);
         okeyButton.setOnAction(e -> {
             confirmWindow.close();
         });
@@ -124,6 +126,7 @@ public class ConfirmBox {
 
         layout.getChildren().addAll(label, okeyButton);
         layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(15, 15, 15, 15));
         confirmWindow.setScene(new Scene(layout));
         confirmWindow.showAndWait();
     }

@@ -32,6 +32,7 @@ public class DeleteHTMLtext extends Application {
     Button buttonRemoveTextFromTextField;
     TextField inputHTMLfield;
     BorderPane layout;
+    MenuItem saveFileButton;
 
     public static String pathForFileChooser = "";
 
@@ -64,10 +65,14 @@ public class DeleteHTMLtext extends Application {
         MenuItem openFile = new MenuItem("Открыть файл...");
         openFile.setOnAction(e -> openTextFile());
         fileMenu.getItems().add(openFile);
-        MenuItem saveFileButton = new MenuItem("Сохранить как...");
-//        saveFile.setDisable(true);
+        saveFileButton = new MenuItem("Сохранить как...");
+        saveFileButton.setDisable(true);
         saveFileButton.setOnAction(e -> saveFileFileChooser());
         fileMenu.getItems().add(saveFileButton);
+        fileMenu.getItems().add(new SeparatorMenuItem());
+        MenuItem clearBuffer = new MenuItem("Очистить буффер обмена...");
+        clearBuffer.setOnAction(e -> clearBuffer());
+        fileMenu.getItems().add(clearBuffer);
         fileMenu.getItems().add(new SeparatorMenuItem());
         MenuItem exit = new MenuItem("Выйти с программы...");
         exit.setOnAction(e -> closeProgram());
@@ -134,6 +139,11 @@ public class DeleteHTMLtext extends Application {
         window.show();
     }
 
+    private void clearBuffer() {
+        saveFileButton.setDisable(true);
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        clipboard.clear();
+    }
 
 
     // Button 'Execute'
@@ -159,6 +169,7 @@ public class DeleteHTMLtext extends Application {
         if(isSaveAsButton){
             saveFileFileChooser();
         }
+        saveFileButton.setDisable(false);
     }
 
     // Button 'Вставить'
@@ -241,8 +252,10 @@ public class DeleteHTMLtext extends Application {
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All text files", "*.doc", "*.docx", "*.txt"),
-                new FileChooser.ExtensionFilter("Docs files", "*.doc", "*.docx"),
+//                new FileChooser.ExtensionFilter("All text files", "*.doc", "*.docx", "*.txt"),
+                new FileChooser.ExtensionFilter("All text files", "*.docx", "*.txt"),
+//                new FileChooser.ExtensionFilter("Docs files", "*.doc", "*.docx"),   DONT WORK DocREADER
+                new FileChooser.ExtensionFilter("Docs files", "*.docx"),
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"));
         fileChooser.setTitle("Open Text File");
         if(pathForFileChooser != null && !pathForFileChooser.equals("")){

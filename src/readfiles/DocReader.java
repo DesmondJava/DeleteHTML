@@ -8,9 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 
 
-/**
- * Created by ������������� on 07.07.2015.
- */
 public class DocReader implements ReadFromFile {
 
     private File file;
@@ -28,7 +25,7 @@ public class DocReader implements ReadFromFile {
             text = we.getText();
         } catch(org.apache.poi.poifs.filesystem.OfficeXmlFileException | java.io.IOException e){
             String message = e.getMessage();
-            ConfirmBox.displayError("Error", message);
+            ConfirmBox.displayError("Error", "Произошла неизвестная ошибка. Возможно в файле присутствуют картинки или текст в таблице\n" + message);
             e.printStackTrace();
         }
 

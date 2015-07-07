@@ -9,9 +9,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by ������������� on 07.07.2015.
- */
 public class DocxReaderNew implements ReadFromFile {
 
     private File file;
@@ -27,16 +24,14 @@ public class DocxReaderNew implements ReadFromFile {
             XWPFDocument document = new XWPFDocument(fis);
             List<XWPFParagraph> paragraphs = document.getParagraphs();
             StringBuilder sb = new StringBuilder();
-            System.out.println("Total no of paragraph "+paragraphs.size());
             for(XWPFParagraph text : paragraphs){
-                System.out.println(text.getText());
                 sb.append(text.getText());
             }
             result = sb.toString();
 
         } catch(org.apache.poi.POIXMLException | IOException e){
             String message = e.getMessage();
-            ConfirmBox.displayError("Error", message);
+            ConfirmBox.displayError("Error", "Произошла неизвестная ошибка. Возможно в файле присутствуют картинки или текст в таблице\n" + message);
             e.printStackTrace();
         }
         return result;

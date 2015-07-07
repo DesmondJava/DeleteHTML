@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- * Created by ������������� on 07.07.2015.
- */
 public class TxtReader implements ReadFromFile {
 
     private File file;
@@ -25,7 +22,7 @@ public class TxtReader implements ReadFromFile {
             result = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
         } catch (IOException e) {
             String message = e.getMessage();
-            ConfirmBox.displayError("Error", message);
+            ConfirmBox.displayError("Error", "Произошла неизвестная ошибка\n" + message);
             e.printStackTrace();
         }
         return result;
