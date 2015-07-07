@@ -26,11 +26,13 @@ public class DocReader implements ReadFromFile {
             HWPFDocument doc = new HWPFDocument(fis);
             WordExtractor we = new WordExtractor(doc);
             text = we.getText();
-        } catch (java.io.IOException e) {
+        } catch(org.apache.poi.poifs.filesystem.OfficeXmlFileException | java.io.IOException e){
             String message = e.getMessage();
             ConfirmBox.displayError(message);
             e.printStackTrace();
         }
+
+
         return text;
     }
 }

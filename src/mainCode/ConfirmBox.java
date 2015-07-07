@@ -75,8 +75,8 @@ public class ConfirmBox {
         Stage confirmWindow = new Stage();
         confirmWindow.setTitle("Error");
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
-        confirmWindow.setMinWidth(500);
-        confirmWindow.setMinHeight(500);
+        confirmWindow.setMinWidth(550);
+        confirmWindow.setMinHeight(200);
 
         Label label = new Label();
         label.setText(message);

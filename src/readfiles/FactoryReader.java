@@ -12,6 +12,10 @@ public class FactoryReader {
         String fileName = file.getName();
         if(fileName.endsWith(".doc")){
             readFromFile = new DocReader(file);
+        } else if(fileName.endsWith(".docx")){
+            readFromFile = new DocxReaderNew(file);
+        } else if(fileName.endsWith(".txt")){
+            readFromFile = new TxtReader(file);
         }
         return readFromFile;
     }

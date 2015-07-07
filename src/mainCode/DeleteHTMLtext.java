@@ -31,6 +31,7 @@ public class DeleteHTMLtext extends Application {
     TextField inputHTMLfield;
     BorderPane layout;
 
+    public static String pathForFileChooser = "";
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -188,12 +189,18 @@ public class DeleteHTMLtext extends Application {
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-             new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-             new FileChooser.ExtensionFilter("Docs files", "*.doc", "*.docx"));
+                new FileChooser.ExtensionFilter("All text files", "*.doc", "*.docx", "*.txt"),
+                new FileChooser.ExtensionFilter("Docs files", "*.doc", "*.docx"),
+                new FileChooser.ExtensionFilter("Text Files", "*.txt"));
         fileChooser.setTitle("Open Text File");
+        if(pathForFileChooser != null && !pathForFileChooser.equals("")){
+            File defaultDirectory = new File(pathForFileChooser);
+            fileChooser.setInitialDirectory(defaultDirectory);
+        }
         File file = fileChooser.showOpenDialog(confirmWindow);
         if (file != null) {
             result = readFromFile(file);
+            pathForFileChooser = file.getParent();
         }
         inputHTMLfield.setText(result);
 
