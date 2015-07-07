@@ -1,11 +1,10 @@
-package sample;
+package maincode;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -72,6 +71,29 @@ public class ConfirmBox {
         confirmWindow.showAndWait();
     }
 
+    public static void displayError(String message){
+        Stage confirmWindow = new Stage();
+        confirmWindow.setTitle("Error");
+        confirmWindow.initModality(Modality.APPLICATION_MODAL);
+        confirmWindow.setMinWidth(500);
+        confirmWindow.setMinHeight(500);
+
+        Label label = new Label();
+        label.setText(message);
+
+        Button okeyButton = new Button();
+        okeyButton.setText("Ok");
+        okeyButton.setOnAction(e -> {
+            confirmWindow.close();
+        });
+
+        VBox layout = new VBox(10);
+
+        layout.getChildren().addAll(label, okeyButton);
+        layout.setAlignment(Pos.CENTER);
+        confirmWindow.setScene(new Scene(layout));
+        confirmWindow.showAndWait();
+    }
 
 
 }

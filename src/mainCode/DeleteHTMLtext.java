@@ -1,4 +1,4 @@
-package sample;
+package maincode;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -15,10 +15,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.jsoup.Jsoup;
+import readfiles.FactoryReader;
+import readfiles.ReadFromFile;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File;
 
 
 public class DeleteHTMLtext extends Application {
@@ -130,10 +130,6 @@ public class DeleteHTMLtext extends Application {
         window.show();
     }
 
-    private void openFile() {
-
-    }
-
     // Button 'Execute'
     private void executeHTMLfromClipboard() {
         String textHTML = inputHTMLfield.getText();
@@ -204,13 +200,8 @@ public class DeleteHTMLtext extends Application {
     }
 
     private String readFromFile(File file) {
-        String result = "";
-        try {
-            result = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
+        ReadFromFile readFromFile = FactoryReader.getReader(file);
+        return readFromFile.readFile();
     }
 
     public static void main(String[] args) {
