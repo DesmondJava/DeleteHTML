@@ -58,6 +58,7 @@ public class DeleteHTMLtext extends Application {
         Label madeBy = new Label();
         madeBy.setText("This program made by Vadym Shevchenko   ");
         madeBy.setAlignment(Pos.BOTTOM_RIGHT);
+        madeBy.setId("vadym");
 
         //Menu
         //File
@@ -96,12 +97,15 @@ public class DeleteHTMLtext extends Application {
 
         //Form
         inputHTMLfield = new TextField();
+        inputHTMLfield.setPromptText("Вставьте Ваш HTML текст сюда...");
         inputHTMLfield.setPrefColumnCount(35);
+        inputHTMLfield.setMinHeight(20);
 
         //Button
         buttonExecute = new Button("Выполнить");
         buttonExecute.setOnAction(e -> executeHTMLfromClipboard());
         buttonExecute.setMinWidth(60);
+        buttonExecute.setId("executeButton");
         buttonPastle = new Button("Вставить");
         buttonPastle.setOnAction(e -> pastleTextField());
         buttonPastle.setMinWidth(60);
@@ -117,6 +121,7 @@ public class DeleteHTMLtext extends Application {
         HBox hboxMadeBy = new HBox(10);
         hboxMadeBy.getChildren().addAll(madeBy);
         hboxMadeBy.setAlignment(Pos.BASELINE_RIGHT);
+        hboxMadeBy.setId("vadym");
 
         VBox vertLayout = new VBox(13);
         vertLayout.setPadding(new Insets(20, 20, 20, 20));
@@ -131,7 +136,8 @@ public class DeleteHTMLtext extends Application {
         layout.setPadding(new Insets(0, 0, 10, 0));
 
 
-        scene = new Scene(layout, 670, 290);
+        scene = new Scene(layout, 670, 320);
+        scene.getStylesheets().add("styles/CustomStyle.css");
         window.setScene(scene);
         window.setMinHeight(260);
         window.setMinWidth(350);

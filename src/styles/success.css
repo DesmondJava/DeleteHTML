@@ -1,0 +1,22 @@
+.root {
+    -fx-background-color: #A1B56C;
+}
+
+.label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
+.button {
+    -fx-background-color: linear-gradient(#ff5400, #be1d00);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-focus-color: #FF0000;
+    -fx-background-color: #ED9C28, #0187ab;
+}

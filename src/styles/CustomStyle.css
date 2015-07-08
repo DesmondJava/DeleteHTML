@@ -1,0 +1,97 @@
+.root{
+    -fx-background-image: url("/resources/greyBackgroundLight.jpg");
+}
+
+.label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
+/* MENU */
+.menu-item .label {
+    -fx-text-fill: white;
+}
+.menu-item:focused {
+    -fx-background-color: darkgray;
+}
+.menu-item:focused .label {
+    -fx-text-fill: #0066ff;
+}
+.context-menu {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
+    -fx-background-color: rgba(6, 0, 3, 0.84);
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4;
+    /*    -fx-padding: 0.666667em 0.083333em 0.666667em 0.083333em;  8 1 8 1 */
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */
+}
+
+
+/*Buttons*/
+.button {
+    -fx-font-size: 13.0px;
+    -fx-base: #00a7d4;
+    -fx-background: #e5f3f6;
+    -fx-focus-color: #0093FF;
+    -fx-control-inner-background: #FFFFFF;
+    -fx-text-base-color: #FFFFFF;
+    -fx-background-color:#00a7d4;
+    -fx-inner-border: linear-gradient(to bottom, derive(-fx-color,73.6%) 0%, derive(-fx-color,29.200000000000003%) 100%);
+    -fx-body-color: linear-gradient( to bottom, derive(-fx-color, 34.0%) 0%, derive(-fx-color, -18.0%) 100%);
+    -fx-background-insets: 0px;
+    -fx-background-radius: 0px;
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+.button:focused {
+    -fx-color:#00a7d4;
+    -fx-background-color:#ED9C28, #00a7d4;
+    -fx-background-insets: -1.4, 0, 1, 2;
+    -fx-background-radius: 0;
+}
+.button:hover {
+    -fx-focus-color: #FF0000;
+    -fx-background-color: #ED9C28, #0187ab;
+}
+
+
+/*Button execute*/
+#executeButton {
+    -fx-padding: 8 15 15 15;
+    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+    -fx-background-radius: 8;
+    -fx-background-color:
+    linear-gradient(from 0% 93% to 0% 100%, #5f84a3 0%, #565e90 100%),
+    #585a9d,
+    #00a7d4,
+    radial-gradient(center 50% 50%, radius 100%, #69acd8, #378dc5);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+}
+#executeButton:hover {
+    -fx-background-color:
+    linear-gradient(from 0% 93% to 0% 100%, #7594a3 0%, #342e90 100%),
+    #6d789d,
+    #67d5d8,
+    radial-gradient(center 50% 50%, radius 100%, #91e1ea, #94b2c5);
+}
+#executeButton:pressed {
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+#executeButton Text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #1900a3, 0,0,0,2 );
+}
+
+
+#vadym {
+    -fx-fill: FIREBRICK;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}

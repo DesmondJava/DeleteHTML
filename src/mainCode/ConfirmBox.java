@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -74,7 +75,7 @@ public class ConfirmBox {
 
     public static boolean displaySucces(){
         Stage confirmWindow = new Stage();
-        confirmWindow.setTitle("Успех");
+        confirmWindow.setTitle("Успех!");
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
         confirmWindow.setMinWidth(500);
         confirmWindow.setMinHeight(150);
@@ -86,7 +87,7 @@ public class ConfirmBox {
                 "Вы можете вставить полученый текст в любой удобный Вам редактор.");
 
         Button saveAsButton = new Button();
-        saveAsButton.setText("Сохранить как");
+        saveAsButton.setText("Сохранить как...");
         saveAsButton.setOnAction(e -> {
             isSaveAs[0] = true;
             confirmWindow.close();
@@ -98,11 +99,18 @@ public class ConfirmBox {
             confirmWindow.close();
         });
 
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.getChildren().addAll(saveAsButton, okeyButton);
+
         VBox layout = new VBox(10);
 
-        layout.getChildren().addAll(label, saveAsButton, okeyButton);
+        layout.getChildren().addAll(label, hbox);
+        layout.setPadding(new Insets(12, 12, 12, 12));
         layout.setAlignment(Pos.CENTER);
-        confirmWindow.setScene(new Scene(layout));
+        Scene scene = new Scene(layout);
+        scene.getStylesheets().add("styles/success.css");
+        confirmWindow.setScene(scene);
         confirmWindow.showAndWait();
         return isSaveAs[0];
     }
