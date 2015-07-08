@@ -10,7 +10,7 @@
 }
 
 .button {
-    -fx-background-color: linear-gradient(#ff5400, #be1d00);
+    -fx-background-color: linear-gradient(#ffa70b, #be4e00);
     -fx-background-radius: 30;
     -fx-background-insets: 0;
     -fx-text-fill: white;
@@ -18,5 +18,5 @@
 
 .button:hover {
     -fx-focus-color: #FF0000;
-    -fx-background-color: #ED9C28, #0187ab;
+    -fx-background-color: #ED9C28, #b70500;
 }

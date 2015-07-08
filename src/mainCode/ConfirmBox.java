@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -14,12 +16,12 @@ public class ConfirmBox {
 
     private static boolean result = false;
 
+    //Простое окошко, например, используется для выхода из программы
+    //Кнопки ДА и НЕТ
     public static boolean display(String title, String message){
         Stage confirmWindow = new Stage();
         confirmWindow.setTitle(title);
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
-        confirmWindow.setMinWidth(300);
-        confirmWindow.setMinHeight(150);
 
         Label label = new Label();
         label.setText(message);
@@ -40,45 +42,61 @@ public class ConfirmBox {
             confirmWindow.close();
         });
 
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.getChildren().addAll(buttonYes, buttonNo);
+
         VBox layout = new VBox(10);
 
-        layout.getChildren().addAll(label, buttonYes, buttonNo);
+        layout.getChildren().addAll(label, hbox);
         layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(12, 12, 12, 12));
         confirmWindow.setScene(new Scene(layout));
         confirmWindow.showAndWait();
         return result;
     }
 
-    public static void displayWarning(String title, String message, String nameButton){
+    //Окно предупреждения о не правильном использовании программы, например пустой буффер и нажать Выполнить
+    //Кнопка Хорошо
+    public static void displayWarning(String message){
         Stage confirmWindow = new Stage();
-        confirmWindow.setTitle(title);
+        confirmWindow.setTitle("Предупреждение!");
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
-        confirmWindow.setMinWidth(500);
-        confirmWindow.setMinHeight(150);
 
         Label label = new Label();
         label.setText(message);
 
+
+        final ImageView imv = new ImageView();
+        final Image image2 = new Image("/resources/warning.png");
+        imv.setImage(image2);
+
         Button okeyButton = new Button();
-        okeyButton.setText(nameButton);
+        okeyButton.setText("Хорошо");
         okeyButton.setOnAction(e -> {
             confirmWindow.close();
         });
 
-        VBox layout = new VBox(10);
+        HBox hbox = new HBox(10);
+        hbox.getChildren().addAll(imv, label);
+        hbox.setAlignment(Pos.CENTER);
 
-        layout.getChildren().addAll(label, okeyButton);
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(hbox, okeyButton);
         layout.setAlignment(Pos.CENTER);
-        confirmWindow.setScene(new Scene(layout));
+        layout.setPadding(new Insets(12, 12, 12, 12));
+        Scene scene = new Scene(layout);
+        scene.getStylesheets().add("styles/warning.css");
+        confirmWindow.setScene(scene);
         confirmWindow.showAndWait();
     }
 
+    //Окно при успешном выполнении задания
+    //Кнопки Сохранить как и Отлично
     public static boolean displaySucces(){
         Stage confirmWindow = new Stage();
         confirmWindow.setTitle("Успех!");
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
-        confirmWindow.setMinWidth(500);
-        confirmWindow.setMinHeight(150);
 
         final boolean[] isSaveAs = {false};
 
@@ -115,7 +133,43 @@ public class ConfirmBox {
         return isSaveAs[0];
     }
 
+    //Использовуется для ошибок и информатировании пользователя
+    //Кнопка окей
     public static void displayError(String title, String message){
+        Stage confirmWindow = new Stage();
+        confirmWindow.setTitle(title);
+        confirmWindow.initModality(Modality.APPLICATION_MODAL);
+
+        Label label = new Label();
+        label.setText(message);
+
+        final ImageView imv = new ImageView();
+        final Image image2 = new Image("/resources/error.png");
+        imv.setImage(image2);
+
+        Button okeyButton = new Button();
+        okeyButton.setText("Ok");
+        okeyButton.setMinWidth(40);
+        okeyButton.setOnAction(e -> {
+            confirmWindow.close();
+        });
+
+        HBox hbox = new HBox(10);
+        hbox.getChildren().addAll(imv, label);
+        hbox.setAlignment(Pos.CENTER);
+
+        VBox layout = new VBox(10);
+
+        layout.getChildren().addAll(hbox, okeyButton);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(15, 15, 15, 15));
+        Scene scene = new Scene(layout);
+        scene.getStylesheets().add("styles/error.css");
+        confirmWindow.setScene(scene);
+        confirmWindow.showAndWait();
+    }
+
+    public static void displaySaveOk(String title, String message){
         Stage confirmWindow = new Stage();
         confirmWindow.setTitle(title);
         confirmWindow.initModality(Modality.APPLICATION_MODAL);
@@ -138,6 +192,5 @@ public class ConfirmBox {
         confirmWindow.setScene(new Scene(layout));
         confirmWindow.showAndWait();
     }
-
 
 }

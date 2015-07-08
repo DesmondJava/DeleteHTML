@@ -158,7 +158,7 @@ public class DeleteHTMLtext extends Application {
 
         //Если текстовое поле пустое то предупреждаем пользователя об этом
         if(textHTML.isEmpty()){
-            ConfirmBox.displayWarning("Предупреждение!", "Пожалуйста вставьте сначала ваш текст в текстовую форму", "Хорошо");
+            ConfirmBox.displayWarning("Пожалуйста вставьте сначала ваш текст в текстовую форму");
             return;
         }
 
@@ -183,12 +183,12 @@ public class DeleteHTMLtext extends Application {
         Clipboard clipboard = Clipboard.getSystemClipboard();
 
         if(!clipboard.getContentTypes().contains(DataFormat.PLAIN_TEXT)){
-            ConfirmBox.displayWarning("Предупреждение!", "Ваш буфер обмена не содержит текста\nПожалуйста, скопируйте HTML текст в буффер", "Хорошо");
+            ConfirmBox.displayWarning("Ваш буфер обмена не содержит текста\nПожалуйста, скопируйте HTML текст в буффер");
             return;
         }
         String textFromClipboard = (String) clipboard.getContent(DataFormat.PLAIN_TEXT);
         if(textFromClipboard.isEmpty()){
-            ConfirmBox.displayWarning("Предупреждение!", "Ваш буфер обмена пуст\nСкопируйте HTML текст в буффер", "Хорошо");
+            ConfirmBox.displayWarning("Ваш буфер обмена пуст\nСкопируйте HTML текст в буффер");
             return;
         }
         inputHTMLfield.setText(textFromClipboard);
@@ -221,7 +221,7 @@ public class DeleteHTMLtext extends Application {
         Clipboard clipboard = Clipboard.getSystemClipboard();
 
         if(!clipboard.getContentTypes().contains(DataFormat.PLAIN_TEXT)){
-            ConfirmBox.displayWarning("Предупреждение!", "Ваш буфер обмена не содержит текста\nПожалуйста, выполните для начала операцию 'Выполнить'", "Хорошо");
+            ConfirmBox.displayWarning("Ваш буфер обмена не содержит текста\nПожалуйста, выполните для начала операцию 'Выполнить'");
             return;
         }
 
@@ -232,7 +232,7 @@ public class DeleteHTMLtext extends Application {
         File file = fileChooser.showSaveDialog(confirmWindow);
 
         if(textFromClipboard.isEmpty()){
-            ConfirmBox.displayWarning("Предупреждение!", "Ваш буфер обмена не содержит текста\nПожалуйста, выполните для начала операцию 'Выполнить'", "Хорошо");
+            ConfirmBox.displayWarning("Ваш буфер обмена не содержит текста\nПожалуйста, выполните для начала операцию 'Выполнить'");
             return;
         }
         if(file != null){
@@ -244,7 +244,7 @@ public class DeleteHTMLtext extends Application {
         try (FileWriter fileWriter = new FileWriter(file)){
             fileWriter.write(textFromClipboard);
             fileWriter.close();
-            ConfirmBox.displayError("Succesful", "Ваш текст успешно сохранен");
+            ConfirmBox.displaySaveOk("Succesful", "Ваш текст успешно сохранен");
         } catch (IOException ex) {
             String message = ex.getMessage();
             ConfirmBox.displayError("Error", message);
