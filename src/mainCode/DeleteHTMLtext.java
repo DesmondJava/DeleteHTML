@@ -139,7 +139,7 @@ public class DeleteHTMLtext extends Application {
         scene = new Scene(layout, 670, 320);
         scene.getStylesheets().add("styles/CustomStyle.css");
         window.setScene(scene);
-        window.setMinHeight(260);
+        window.setMinHeight(270);
         window.setMinWidth(350);
         window.setMaximized(false);
         window.show();
