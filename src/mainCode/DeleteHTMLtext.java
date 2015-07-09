@@ -18,9 +18,9 @@ import org.jsoup.Jsoup;
 import readfiles.FactoryReader;
 import readfiles.ReadFromFile;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class DeleteHTMLtext extends Application {
@@ -28,11 +28,15 @@ public class DeleteHTMLtext extends Application {
     Stage window;
     Scene scene;
     Button buttonExecute;
-    Button buttonPastle;
-    Button buttonRemoveTextFromTextField;
-    TextField inputHTMLfield;
+    Button buttonPastleHTML;
+    Button buttonPastleLink;
+    Button buttonRemoveTextFromTextHTML;
+    Button buttonRemoveTextFromTextLink;
+    Button buttonLoadFromWebSite;
+    TextField inputLinkField;
     BorderPane layout;
     MenuItem saveFileButton;
+    TextArea inputHTMLfield;
 
     public static String pathForFileChooser = "";
 
@@ -53,6 +57,7 @@ public class DeleteHTMLtext extends Application {
                 "\nКнопки:\n" +
                 "* Вставить - вставляет из буфера текст в текстовую форму\n" +
                 "* Очистить - очищает текстовое поле, если вы допустили ошибки\n" +
+                "* Загрузить - загружает HTML текст страницы по вашему URL (ссылки)\n" +
                 "* Выполнить - превращает HTML текст в простой текст без тегов.\n\n");
 
         Label madeBy = new Label();
@@ -82,10 +87,10 @@ public class DeleteHTMLtext extends Application {
         //Edit
         Menu editMenu = new Menu("_Edit");
         MenuItem paste = new MenuItem("Вставить");
-        paste.setOnAction(e -> pastleTextField());
+        paste.setOnAction(e -> pastleTextFieldHTML());
         editMenu.getItems().add(paste);
         MenuItem remove = new MenuItem("Очистить");
-        remove.setOnAction(e -> removeTextFromTextField());
+        remove.setOnAction(e -> removeTextFromTextHTML());
         editMenu.getItems().add(remove);
         MenuItem execute = new MenuItem("Выполнить");
         execute.setOnAction(e -> executeHTMLfromClipboard());
@@ -96,27 +101,50 @@ public class DeleteHTMLtext extends Application {
         menuBar.getMenus().addAll(fileMenu, editMenu);
 
         //Form
-        inputHTMLfield = new TextField();
+        inputHTMLfield = new TextArea();
         inputHTMLfield.setPromptText("Вставьте Ваш HTML текст сюда...");
         inputHTMLfield.setPrefColumnCount(35);
         inputHTMLfield.setMinHeight(20);
 
-        //Button
+        inputLinkField = new TextField();
+        inputLinkField.setPromptText("https://www.google.com.ua/");
+        inputLinkField.setPrefColumnCount(21);
+        inputLinkField.setMinHeight(20);
+
+        //Buttons
         buttonExecute = new Button("Выполнить");
         buttonExecute.setOnAction(e -> executeHTMLfromClipboard());
         buttonExecute.setMinWidth(60);
         buttonExecute.setId("executeButton");
-        buttonPastle = new Button("Вставить");
-        buttonPastle.setOnAction(e -> pastleTextField());
-        buttonPastle.setMinWidth(60);
-        buttonRemoveTextFromTextField = new Button("Очистить");
-        buttonRemoveTextFromTextField.setOnAction(e -> removeTextFromTextField());
-        buttonRemoveTextFromTextField.setMinWidth(60);
+        buttonPastleHTML = new Button("Вставить");
+        buttonPastleHTML.setOnAction(e -> pastleTextFieldHTML());
+        buttonPastleHTML.setMinWidth(70);
+        buttonPastleLink = new Button("Вставить");
+        buttonPastleLink.setOnAction(e -> pastleTextFieldLink());
+        buttonPastleLink.setMinWidth(70);
+        buttonRemoveTextFromTextHTML = new Button("Очистить");
+        buttonRemoveTextFromTextHTML.setOnAction(e -> removeTextFromTextHTML());
+        buttonRemoveTextFromTextHTML.setMinWidth(70);
+        buttonRemoveTextFromTextLink = new Button("Очистить");
+        buttonRemoveTextFromTextLink.setOnAction(e -> removeTextFromTextLink());
+        buttonRemoveTextFromTextLink.setMinWidth(70);
+        buttonLoadFromWebSite = new Button("Загрузить!");
+        buttonLoadFromWebSite.setId("load");
+        buttonLoadFromWebSite.setOnAction(e -> loadFromLink());
+        buttonLoadFromWebSite.setMinWidth(70);
 
         //Layout
-        HBox hbox = new HBox(10);
-        hbox.getChildren().addAll(inputHTMLfield, buttonPastle, buttonRemoveTextFromTextField);
-        hbox.setAlignment(Pos.CENTER);
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(buttonPastleHTML, buttonRemoveTextFromTextHTML);
+
+        HBox hboxInputHTML = new HBox(10);
+        hboxInputHTML.getChildren().addAll(inputHTMLfield, vBox);
+        hboxInputHTML.setAlignment(Pos.CENTER);
+
+        HBox hboxInputLink = new HBox(10);
+        hboxInputLink.getChildren().addAll(inputLinkField, buttonPastleLink, buttonRemoveTextFromTextLink, buttonLoadFromWebSite);
+        hboxInputLink.setAlignment(Pos.CENTER);
 
         HBox hboxMadeBy = new HBox(10);
         hboxMadeBy.getChildren().addAll(madeBy);
@@ -125,7 +153,7 @@ public class DeleteHTMLtext extends Application {
 
         VBox vertLayout = new VBox(13);
         vertLayout.setPadding(new Insets(20, 20, 20, 20));
-        vertLayout.getChildren().addAll(description,hbox,buttonExecute);
+        vertLayout.getChildren().addAll(description, hboxInputLink, hboxInputHTML, buttonExecute);
         vertLayout.setAlignment(Pos.CENTER);
 
 
@@ -136,19 +164,59 @@ public class DeleteHTMLtext extends Application {
         layout.setPadding(new Insets(0, 0, 10, 0));
 
 
-        scene = new Scene(layout, 670, 320);
+        scene = new Scene(layout, 750, 525);
+
         scene.getStylesheets().add("styles/CustomStyle.css");
         window.setScene(scene);
-        window.setMinHeight(270);
+        window.setMinHeight(330);
         window.setMinWidth(350);
         window.setMaximized(false);
         window.show();
     }
 
+
+
+
     private void clearBuffer() {
         saveFileButton.setDisable(true);
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         clipboard.clear();
+    }
+
+    //Load from Link
+    private void loadFromLink() {
+        String url = inputLinkField.getText();
+
+        //Если текстовое поле пустое то предупреждаем пользователя об этом
+        if(url.isEmpty()){
+            ConfirmBox.displayWarning("Пожалуйста вставьте вашу ссылку в текстовую форму");
+            return;
+        }
+        URL oracle = null;
+        try {
+            oracle = new URL(url);
+        } catch (MalformedURLException e) {
+            ConfirmBox.displayWarning("Не правильный формат ссылки, введите пожалуйста на подобии\nhttp://forum.0day.kiev.ua/index.php?showtopic=11523&st=200&p=5363079&#entry5363079");
+            return;
+        }
+        try ( BufferedReader in = new BufferedReader(
+                new InputStreamReader(oracle.openStream()))){
+            String inputLine;
+            StringBuilder htmlFromSite = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                htmlFromSite.append(inputLine);
+                htmlFromSite.append("\n");
+            }
+
+            inputHTMLfield.setText(htmlFromSite.toString());
+            inputLinkField.setText("");
+        } catch (IOException e) {
+            String message = e.getMessage();
+            ConfirmBox.displayError("Error", "Произошла неизвестная ошибка\n" + message);
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -178,8 +246,8 @@ public class DeleteHTMLtext extends Application {
         saveFileButton.setDisable(false);
     }
 
-    // Button 'Вставить'
-    private void pastleTextField(){
+    // Button 'Вставить HTML'
+    private void pastleTextFieldHTML(){
         Clipboard clipboard = Clipboard.getSystemClipboard();
 
         if(!clipboard.getContentTypes().contains(DataFormat.PLAIN_TEXT)){
@@ -194,9 +262,30 @@ public class DeleteHTMLtext extends Application {
         inputHTMLfield.setText(textFromClipboard);
     }
 
-    // Button 'Очистить'
-    private void removeTextFromTextField() {
+    // Button 'Вставить Link'
+    private void pastleTextFieldLink() {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+
+        if(!clipboard.getContentTypes().contains(DataFormat.PLAIN_TEXT)){
+            ConfirmBox.displayWarning("Ваш буфер обмена не содержит ссылки\nПожалуйста, скопируйте ссылку в буффер");
+            return;
+        }
+        String textFromClipboard = (String) clipboard.getContent(DataFormat.PLAIN_TEXT);
+        if(textFromClipboard.isEmpty()){
+            ConfirmBox.displayWarning("Ваш буфер обмена пуст\nСкопируйте ссылку в буффер");
+            return;
+        }
+        inputLinkField.setText(textFromClipboard);
+    }
+
+    // Button 'Очистить' HTML field
+    private void removeTextFromTextHTML() {
         inputHTMLfield.setText("");
+    }
+
+    // Button 'Очистить' Link field
+    private void removeTextFromTextLink() {
+        inputLinkField.setText("");
     }
 
     // When you close the program we ask confirmation
